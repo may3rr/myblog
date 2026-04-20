@@ -118,6 +118,28 @@ header {
     }
 }
 
+/* Footer */
+.site-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 48px 24px 64px;
+    font-family: 'EB Garamond', 'Lora', serif;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    letter-spacing: 0.02em;
+}
+
+.site-footer .cc-logo {
+    width: 18px;
+    height: 18px;
+    object-fit: cover;
+    border-radius: 50%;
+    vertical-align: middle;
+    opacity: 0.9;
+}
+
 @media (prefers-reduced-motion: reduce) {
     .home-header,
     .tagline,
