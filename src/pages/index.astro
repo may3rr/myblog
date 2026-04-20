@@ -34,10 +34,35 @@ const base = import.meta.env.BASE_URL;
                     <span>{post.data.date}</span>
                 </div>
                 <h2 class="post-title">
-                    <a href={`${base}posts/${post.data.id}/`}>{post.data.title}</a>
+                    <a href={`${base}posts/${post.data.id}/`} class="post-link">{post.data.title}</a>
                 </h2>
                 <p class="post-excerpt">{post.data.note}</p>
             </article>
         ))}
     </div>
+
+    <script>
+        function setupDock() {
+            const body = document.body;
+            const update = () => {
+                body.classList.toggle('docked', window.scrollY > 40);
+            };
+            update();
+            window.addEventListener('scroll', update, { passive: true });
+
+            const scrollToTop = () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+            const labels = document.querySelectorAll('.category-nav label');
+            labels.forEach((l) => l.addEventListener('click', scrollToTop));
+
+            document.addEventListener('astro:before-swap', () => {
+                window.removeEventListener('scroll', update);
+                labels.forEach((l) => l.removeEventListener('click', scrollToTop));
+                body.classList.remove('docked');
+            }, { once: true });
+        }
+        setupDock();
+        document.addEventListener('astro:page-load', setupDock);
+    </script>
 </Base>

@@ -46,6 +46,83 @@ header {
     margin-bottom: 70px;
 }
 
+/* ---- Desktop dock: time-based transition triggered by scroll ---- */
+@media (min-width: 1200px) {
+    header {
+        position: fixed;
+        top: 64px;
+        left: 50%;
+        width: fit-content;
+        max-width: 560px;
+        margin-bottom: 0;
+        z-index: 50;
+        transform: translateX(-50%) scale(1);
+        transform-origin: top center;
+        transition:
+            top 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+            left 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+            transform 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+            max-width 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+        will-change: transform, top, left;
+    }
+
+    .posts-container {
+        padding-top: 260px;
+    }
+
+    .site-title {
+        transition:
+            font-size 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+            line-height 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+        text-wrap: balance;
+    }
+
+    body.docked .site-title {
+        font-size: 1.5rem;
+        line-height: 1.25;
+    }
+
+    /* Docked: horizontally centered in the left gutter, vertically upper-middle */
+    body.docked header {
+        top: 14vh;
+        left: calc((50vw - 320px) / 2);
+        max-width: 280px;
+        transform: translateX(-50%) scale(0.88);
+    }
+
+    .tagline {
+        transition:
+            opacity 0.45s ease,
+            max-height 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+            margin 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        max-height: 120px;
+        overflow: hidden;
+    }
+
+    body.docked .tagline {
+        opacity: 0;
+        max-height: 0;
+        margin: 0;
+        pointer-events: none;
+    }
+
+    .category-nav {
+        transition: gap 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    body.docked .category-nav {
+        gap: 20px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    header,
+    .tagline,
+    .category-nav {
+        transition: none !important;
+    }
+}
+
 .header-top {
     display: flex;
     justify-content: space-between;
