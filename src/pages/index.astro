@@ -13,7 +13,7 @@ const base = import.meta.env.BASE_URL;
     <input type="radio" id="filter-life" name="category" />
     <input type="radio" id="filter-echoes" name="category" />
 
-    <header>
+    <header class="home-header">
         <div class="header-top">
             <div class="header-left">
                 <div class="site-title"><a href={base}>Jackie's Notebook</a></div>
@@ -42,27 +42,46 @@ const base = import.meta.env.BASE_URL;
     </div>
 
     <script>
-        function setupDock() {
+        document.addEventListener('astro:page-load', () => {
             const body = document.body;
-            const update = () => {
-                body.classList.toggle('docked', window.scrollY > 40);
-            };
-            update();
-            window.addEventListener('scroll', update, { passive: true });
+            const header = document.querySelector('.home-header') as HTMLElement | null;
+            if (!header) return;
 
-            const scrollToTop = () => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+            const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            const update = () => {
+                body.classList.toggle('docked', !reduce && window.scrollY > 40);
             };
-            const labels = document.querySelectorAll('.category-nav label');
-            labels.forEach((l) => l.addEventListener('click', scrollToTop));
+            const setHeaderH = () => {
+                document.documentElement.style.setProperty('--home-header-h', header.offsetHeight + 'px');
+            };
+
+            const checked = document.querySelector('input[name="category"]:checked') as HTMLInputElement | null;
+            let currentFilterId = checked?.id ?? null;
+            const onLabelClick = (e: Event) => {
+                const forId = (e.currentTarget as HTMLLabelElement).getAttribute('for');
+                if (forId && forId !== currentFilterId) {
+                    currentFilterId = forId;
+                    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+                }
+            };
+
+            const labels = document.querySelectorAll<HTMLLabelElement>('.category-nav label');
+            labels.forEach((l) => l.addEventListener('click', onLabelClick));
+
+            update();
+            setHeaderH();
+
+            window.addEventListener('scroll', update, { passive: true });
+            const ro = new ResizeObserver(setHeaderH);
+            ro.observe(header);
 
             document.addEventListener('astro:before-swap', () => {
                 window.removeEventListener('scroll', update);
-                labels.forEach((l) => l.removeEventListener('click', scrollToTop));
+                ro.disconnect();
+                labels.forEach((l) => l.removeEventListener('click', onLabelClick));
                 body.classList.remove('docked');
             }, { once: true });
-        }
-        setupDock();
-        document.addEventListener('astro:page-load', setupDock);
+        });
     </script>
 </Base>

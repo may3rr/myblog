@@ -46,28 +46,30 @@ header {
     margin-bottom: 70px;
 }
 
-/* ---- Desktop dock: time-based transition triggered by scroll ---- */
+/* ---- Home-page dock: time-based transition triggered by scroll ---- */
 @media (min-width: 1200px) {
-    header {
+    .home-header {
         position: fixed;
-        top: 64px;
-        left: 50%;
+        top: 0;
+        left: 0;
         width: fit-content;
         max-width: 560px;
         margin-bottom: 0;
         z-index: 50;
-        transform: translateX(-50%) scale(1);
-        transform-origin: top center;
+        /* Undocked: left edge aligned with posts column (container's content-left edge),
+           64px from viewport top. All positioning via transform for compositor-thread animation. */
+        transform: translate(
+            calc((var(--vw, 100vw) - var(--content-width)) / 2),
+            64px
+        );
         transition:
-            top 0.75s cubic-bezier(0.22, 1, 0.36, 1),
-            left 0.75s cubic-bezier(0.22, 1, 0.36, 1),
             transform 0.75s cubic-bezier(0.22, 1, 0.36, 1),
             max-width 0.75s cubic-bezier(0.22, 1, 0.36, 1);
-        will-change: transform, top, left;
+        will-change: transform;
     }
 
     .posts-container {
-        padding-top: 260px;
+        padding-top: calc(var(--home-header-h, 200px) + 80px);
     }
 
     .site-title {
@@ -82,12 +84,13 @@ header {
         line-height: 1.25;
     }
 
-    /* Docked: horizontally centered in the left gutter, vertically upper-middle */
-    body.docked header {
-        top: 14vh;
-        left: calc((50vw - 320px) / 2);
-        max-width: 280px;
-        transform: translateX(-50%) scale(0.88);
+    /* Docked: centered in the left gutter = (vw - content-width) / 4, vertically at 14vh */
+    body.docked .home-header {
+        max-width: 260px;
+        transform: translate(
+            calc((var(--vw, 100vw) - var(--content-width)) / 4 - 50%),
+            14vh
+        );
     }
 
     .tagline {
@@ -116,8 +119,9 @@ header {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    header,
+    .home-header,
     .tagline,
+    .site-title,
     .category-nav {
         transition: none !important;
     }
