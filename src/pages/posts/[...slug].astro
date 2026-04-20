@@ -18,6 +18,9 @@ const { Content } = await render(post);
 
 <Base title={post.data.title}>
     <article class="post-detail">
+        <div class="back-link" style="margin-bottom: 16px; padding-top: 0; border-top: none;">
+            <a href={base}>← 返回目录</a>
+        </div>
         <header>
             <div class="post-meta">
                 <span>{post.data.date}</span>
