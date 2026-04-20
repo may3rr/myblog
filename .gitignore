@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Astro cache
+.astro/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# Local-only files
+HANDOFF.md
+*.py
+drafts/

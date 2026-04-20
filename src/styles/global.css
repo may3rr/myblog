@@ -1,0 +1,326 @@
+:root {
+    --bg-color: #fdfcf8;
+    --text-main: #2b2f36;
+    --text-muted: #858b94;
+    --accent-color: #b84b31;
+    --border-light: rgba(0,0,0,0.06);
+    --content-width: 640px;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #121315;
+        --text-main: #d4d4d4;
+        --text-muted: #6b7078;
+        --accent-color: #d96c53;
+        --border-light: rgba(255,255,255,0.08);
+    }
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: 'Noto Serif SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', serif;
+    font-size: 17px;
+    line-height: 1.85;
+    letter-spacing: 0.02em;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    overflow-y: scroll;
+}
+
+.container {
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: 80px 24px 120px;
+}
+
+/* Radio controller for category filter */
+input[type="radio"] {
+    display: none;
+}
+
+/* Header */
+header {
+    margin-bottom: 70px;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 40px;
+}
+
+.header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.site-title {
+    font-family: 'EB Garamond', 'Lora', serif;
+    font-size: 2.2rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--text-main);
+    line-height: 1.2;
+}
+
+.site-title a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.tagline {
+    font-family: 'Noto Serif SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', serif;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin: 0;
+    max-width: 420px;
+}
+
+.category-nav {
+    display: flex;
+    justify-content: flex-start;
+    gap: 32px;
+    position: relative;
+}
+
+.category-nav label {
+    cursor: pointer;
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    padding-bottom: 8px;
+}
+
+.category-nav label::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 1px;
+    background-color: var(--accent-color);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.category-nav label:hover {
+    color: var(--text-main);
+}
+
+#filter-all:checked ~ header .label-all,
+#filter-life:checked ~ header .label-life,
+#filter-echoes:checked ~ header .label-echoes {
+    color: var(--text-main);
+}
+
+#filter-all:checked ~ header .label-all::after,
+#filter-life:checked ~ header .label-life::after,
+#filter-echoes:checked ~ header .label-echoes::after {
+    width: 100%;
+}
+
+/* Posts list */
+.posts-container {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+}
+
+/* Article card in list */
+article.post-card {
+    animation: softAppear 0.6s ease forwards;
+    padding-bottom: 60px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+article.post-card:last-child {
+    border-bottom: none;
+}
+
+@keyframes softAppear {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Category filter */
+#filter-life:checked ~ .posts-container article[data-category="echoes"] {
+    display: none;
+}
+
+#filter-echoes:checked ~ .posts-container article[data-category="life"] {
+    display: none;
+}
+
+/* Post meta */
+.post-meta {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+
+/* Post card title (clickable) */
+.post-title {
+    font-size: 1.3rem;
+    font-weight: 500;
+    line-height: 1.5;
+    margin: 0 0 12px 0;
+}
+
+.post-title a {
+    color: var(--text-main);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.post-title a:hover {
+    color: var(--accent-color);
+}
+
+/* Post excerpt in list */
+.post-excerpt {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin: 0;
+}
+
+/* Post detail page */
+.post-detail {
+    animation: softAppear 0.6s ease forwards;
+}
+
+.post-detail .post-body p {
+    margin: 0 0 1.6em 0;
+    text-align: justify;
+}
+
+.post-detail .post-body blockquote {
+    margin: 2em 0;
+    padding: 0 0 0 1.5em;
+    border-left: 2px solid var(--accent-color);
+    color: var(--text-muted);
+}
+
+.post-detail .post-body h2 {
+    font-size: 1.4rem;
+    margin: 2em 0 0.8em;
+    font-weight: 500;
+}
+
+.post-detail .post-body h3 {
+    font-size: 1.2rem;
+    margin: 1.8em 0 0.6em;
+    font-weight: 500;
+}
+
+.post-detail .post-body ul,
+.post-detail .post-body ol {
+    margin: 1em 0 1.6em;
+    padding-left: 1.5em;
+}
+
+.post-detail .post-body li {
+    margin-bottom: 0.4em;
+}
+
+.post-detail .post-body a {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+
+.post-detail .post-body a:hover {
+    opacity: 0.8;
+}
+
+.post-detail .post-body hr {
+    border: none;
+    border-top: 1px solid var(--border-light);
+    margin: 2em 0;
+}
+
+.post-detail .post-body img {
+    max-width: 100%;
+    border-radius: 4px;
+}
+
+/* Back link */
+.back-link {
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border-light);
+}
+
+.back-link a {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.back-link a:hover {
+    color: var(--accent-color);
+}
+
+/* Floating images (AAAI paper style) */
+.post-images {
+    float: right;
+    width: 220px;
+    margin: 0 0 16px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.post-images img {
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid var(--border-light);
+    opacity: 0.92;
+    transition: opacity 0.3s;
+}
+
+.post-images img:hover {
+    opacity: 1;
+}
+
+/* Clearfix for float */
+.post-detail::after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+@media (max-width: 640px) {
+    .post-images {
+        float: none;
+        width: 100%;
+        margin: 0 0 24px 0;
+    }
+    .header-top {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .site-title {
+        font-size: 1.8rem;
+    }
+    .tagline {
+        max-width: none;
+    }
+    .category-nav {
+        gap: 24px;
+    }
+}

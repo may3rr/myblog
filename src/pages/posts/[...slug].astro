@@ -1,0 +1,44 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+
+const base = import.meta.env.BASE_URL;
+
+export async function getStaticPaths() {
+    const posts = await getCollection('posts');
+    return posts.map((post) => ({
+        params: { slug: post.data.id },
+        props: { post },
+    }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<Base title={post.data.title}>
+    <article class="post-detail">
+        <header>
+            <div class="post-meta">
+                <span>{post.data.date}</span>
+            </div>
+            <h1 class="post-title" style="font-size: 1.6rem; margin-top: 12px;">{post.data.title}</h1>
+        </header>
+
+        {post.data.images && post.data.images.length > 0 && (
+            <div class="post-images">
+                {post.data.images.map((img) => (
+                    <img src={img} alt="" loading="lazy" />
+                ))}
+            </div>
+        )}
+
+        <div class="post-body">
+            <Content />
+        </div>
+
+        <div class="back-link">
+            <a href={base}>← 返回目录</a>
+        </div>
+    </article>
+</Base>

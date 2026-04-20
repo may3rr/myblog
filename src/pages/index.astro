@@ -1,0 +1,43 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('posts');
+const posts = allPosts.sort((a, b) => b.data.date.localeCompare(a.data.date));
+const base = import.meta.env.BASE_URL;
+---
+
+<Base title="Jackie's Notebook">
+    <!-- CSS radio controllers -->
+    <input type="radio" id="filter-all" name="category" checked />
+    <input type="radio" id="filter-life" name="category" />
+    <input type="radio" id="filter-echoes" name="category" />
+
+    <header>
+        <div class="header-top">
+            <div class="header-left">
+                <div class="site-title"><a href={base}>Jackie's Notebook</a></div>
+                <p class="tagline">我觉得在脑中混沌的想一下算不上思考，所以我偶尔会写下来。</p>
+            </div>
+        </div>
+        <nav class="category-nav">
+            <label for="filter-all" class="label-all">全部</label>
+            <label for="filter-life" class="label-life">随笔</label>
+            <label for="filter-echoes" class="label-echoes">音乐、影视和书</label>
+        </nav>
+    </header>
+
+    <div class="posts-container">
+        {posts.map((post) => (
+            <article data-category={post.data.category} class="post-card">
+                <div class="post-meta">
+                    <span>{post.data.date}</span>
+                </div>
+                <h2 class="post-title">
+                    <a href={`${base}posts/${post.data.id}/`}>{post.data.title}</a>
+                </h2>
+                <p class="post-excerpt">{post.data.note}</p>
+            </article>
+        ))}
+    </div>
+</Base>
